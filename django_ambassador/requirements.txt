@@ -1,0 +1,10 @@
+-i https://pypi.org/simple
+asgiref==3.7.2; python_version >= '3.7'
+django==5.0.2; python_version >= '3.10'
+django-cors-headers==4.3.1; python_version >= '3.8'
+django-mysql==4.12.0; python_version >= '3.8'
+djangorestframework==3.14.0; python_version >= '3.6'
+mysqlclient==2.2.4; python_version >= '3.8'
+pytz==2024.1
+sqlparse==0.4.4; python_version >= '3.5'
+tzdata==2024.1; sys_platform == 'win32'
