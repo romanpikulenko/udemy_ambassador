@@ -1,0 +1,29 @@
+POST http://localhost:8000/api/admin/register/
+content-type: application/json
+
+{
+    "first_name": "test1",
+    "last_name": "test1",
+    "email": "test1@mail.ru",
+    "password": "1",
+    "password_confirm": "1"
+}
+###
+POST http://localhost:8000/api/admin/register/
+content-type: application/json
+
+{
+    "first_name": "test2",
+    "last_name": "test2",
+    "email": "test2@mail.ru",
+    "password": "1",
+    "password_confirm": "1"
+}
+###
+POST http://localhost:8000/api/admin/login/
+content-type: application/json
+
+{
+    "email": "test2@mail.ru",
+    "password": "1"
+}

@@ -9,6 +9,7 @@ djangorestframework = "*"
 mysqlclient = "*"
 django-mysql = "*"
 django-cors-headers = "*"
+pyjwt = "*"
 
 [dev-packages]
 

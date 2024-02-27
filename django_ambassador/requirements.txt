@@ -5,6 +5,7 @@ django-cors-headers==4.3.1; python_version >= '3.8'
 django-mysql==4.12.0; python_version >= '3.8'
 djangorestframework==3.14.0; python_version >= '3.6'
 mysqlclient==2.2.4; python_version >= '3.8'
+pyjwt==2.8.0; python_version >= '3.7'
 pytz==2024.1
 sqlparse==0.4.4; python_version >= '3.5'
 tzdata==2024.1; sys_platform == 'win32'
