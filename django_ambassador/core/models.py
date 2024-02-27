@@ -15,6 +15,7 @@ class UserManager(BaseUserManager):
 
         user.is_admin = False
         user.is_staff = False
+        user.is_ambassador = False
         user.save(using=self._db)
 
         return user
@@ -30,6 +31,7 @@ class UserManager(BaseUserManager):
 
         user.is_admin = True
         user.is_staff = True
+        user.is_ambassador = False
         user.is_superuser = True
         user.save(using=self._db)
 
@@ -48,3 +50,10 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+
+class Product(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(max_length=1000, null=True)
+    image = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
