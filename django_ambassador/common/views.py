@@ -58,3 +58,16 @@ class UserAPIView(APIView):
         response = Response(serializer.data)
 
         return response
+
+
+class LogoutAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, _):
+        response = Response()
+
+        response.delete_cookie(key=settings.ACCESS_TOKEN_NAME)
+        response.data = {"message": "success"}
+
+        return response
