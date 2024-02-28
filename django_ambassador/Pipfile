@@ -11,6 +11,7 @@ django-mysql = "*"
 django-cors-headers = "*"
 pyjwt = "*"
 faker = "*"
+django-redis = "*"
 
 [dev-packages]
 

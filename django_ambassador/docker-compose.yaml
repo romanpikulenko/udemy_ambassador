@@ -9,6 +9,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
 
   db:
     image: mysql:8.3.0
@@ -27,3 +29,7 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+  redis:
+    image: redis
+    ports:
+      - 6379:6379
