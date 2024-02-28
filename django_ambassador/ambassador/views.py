@@ -25,12 +25,12 @@ class ProductfrontendAPIView(APIView):
 
 class ProductbackendAPIView(APIView):
     def get(self, request):
-        products = cache.get("product_backend")
+        products = cache.get("products_backend")
 
         if not products:
             time.sleep(2)
             products = list(Product.objects.all())
-            cache.set("product_backend", products, timeout=30 * 60)  # 60 minutes
+            cache.set("products_backend", products, timeout=30 * 60)  # 60 minutes
 
         s: str = request.query_params.get("s", "")
 

@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from rest_framework import generics, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -41,13 +42,27 @@ class ProductGenericAPIView(
         return self.list(request)
 
     def post(self, request):
-        return self.create(request)
+        response = self.create(request)
+        cache.delete("products_backend")
+        for key in cache.keys("*products_frontend*"):  # type: ignore
+            cache.delete(key)
+        return response
 
     def put(self, request, pk):
-        return self.partial_update(request, pk)
+        response = self.partial_update(request, pk)
+        cache.delete("products_backend")
+        for key in cache.keys("*products_frontend*"):  # type: ignore
+            cache.delete(key)
+
+        return response
 
     def delete(self, request, pk=None):
-        return self.destroy(request, pk)
+        response = self.destroy(request, pk)
+        cache.delete("products_backend")
+        for key in cache.keys("*products_frontend*"):  # type: ignore
+            cache.delete(key)
+
+        return response
 
 
 class LinkAPIView(APIView):
