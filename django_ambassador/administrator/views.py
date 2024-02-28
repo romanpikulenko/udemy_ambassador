@@ -3,10 +3,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from administrator.serializers import LinkSerializer, ProductSerializer
+from administrator.serializers import LinkSerializer, OrderSerializer, ProductSerializer
 from common import serializers
 from common.authentication import JWTAuthentication
-from core.models import Link, Product, User
+from core.models import Link, Order, Product, User
 
 
 class AmbassadorAPIView(APIView):
@@ -57,5 +57,16 @@ class LinkAPIView(APIView):
     def get(self, request, user_id=None):
         links = Link.objects.filter(user_id=user_id)
         serializer = LinkSerializer(links, many=True)
+
+        return Response(serializer.data)
+
+
+class OrderAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, user_id=None):
+        orders = Order.objects.filter(complete=True)
+        serializer = OrderSerializer(orders, many=True)
 
         return Response(serializer.data)
