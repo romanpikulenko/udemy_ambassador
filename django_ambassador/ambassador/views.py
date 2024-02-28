@@ -1,3 +1,4 @@
+import math
 import time
 
 from django.core.cache import cache
@@ -23,7 +24,7 @@ class ProductfrontendAPIView(APIView):
 
 
 class ProductbackendAPIView(APIView):
-    def get(self, _):
+    def get(self, request):
         products = cache.get("product_backend")
 
         if not products:
@@ -31,6 +32,40 @@ class ProductbackendAPIView(APIView):
             products = list(Product.objects.all())
             cache.set("product_backend", products, timeout=30 * 60)  # 60 minutes
 
-        serializer = ProductSerializer(products, many=True)
+        s: str = request.query_params.get("s", "")
 
-        return Response(serializer.data)
+        if s:
+            products = list(
+                [
+                    p
+                    for p in products
+                    if (s.lower() in p.title.lower()) or (p.description and s.lower() in p.description.lower())
+                ]
+            )
+
+        total = len(products)
+
+        sort_order: str = request.query_params.get("sort", "")
+
+        if sort_order == "asc":
+            products.sort(key=lambda p: p.price)
+        elif sort_order == "desc":
+            products.sort(key=lambda p: p.price, reverse=True)
+
+        per_page = 9
+        page = int(request.query_params.get("page", 1))
+        start = (page - 1) * per_page
+        end = page * per_page
+
+        data = ProductSerializer(products[start:end], many=True).data
+
+        return Response(
+            {
+                "data": data,
+                "meta": {
+                    "total": total,
+                    "page": page,
+                    "last_page": math.ceil(total / per_page),
+                },
+            }
+        )
