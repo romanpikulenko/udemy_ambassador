@@ -1,15 +1,22 @@
 import math
+import random
+import string
 import time
 
 from django.core.cache import cache
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from django_redis import get_redis_connection
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from ambassador.serializers import ProductSerializer
-from core.models import Product
+import ambassador
+from ambassador.serializers import LinkSerializer, LinkStatSerializer, ProductSerializer
+from common import serializers
+from common.authentication import JWTAuthentication
+from core.models import Link, Product, User
 
 
 class ProductfrontendAPIView(APIView):
@@ -69,3 +76,50 @@ class ProductbackendAPIView(APIView):
                 },
             }
         )
+
+
+class LinkAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+
+        serializer = LinkSerializer(
+            data={
+                "user": user.id,
+                "code": "".join(random.choices(string.ascii_lowercase + string.digits, k=6)),
+                "products": request.data["products"],
+            }
+        )
+
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
+
+
+class StatsAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        links = Link.objects.filter(user=user)
+        serializer = LinkStatSerializer(links, many=True)
+
+        return Response(serializer.data)
+
+
+class RankingsAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        con = get_redis_connection("default")
+
+        rankings = con.zrevrangebyscore("rankings", min=0, max=1000000, withscores=True)
+
+        data = {r[0].decode("utf-8"): r[1] for r in rankings}
+
+        return Response(data)
