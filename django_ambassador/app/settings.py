@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "core",
     "administrator",
     "ambassador",
+    "checkout",
 ]
 
 MIDDLEWARE = [
