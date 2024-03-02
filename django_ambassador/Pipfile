@@ -12,6 +12,7 @@ django-cors-headers = "*"
 pyjwt = "*"
 faker = "*"
 django-redis = "*"
+stripe = "*"
 
 [dev-packages]
 

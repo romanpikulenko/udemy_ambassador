@@ -161,3 +161,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 # JWT
 ACCESS_TOKEN_NAME = "jwt"
+
+# EMAIL
+EMAIL_HOST = "host.docker.internal"
+EMAIL_PORT = "1025"
