@@ -1,0 +1,29 @@
+<main class="form-signin w-100 m-auto">
+  <form [formGroup]="form" (submit)="submit()">
+    <h1 class="h3 mb-3 fw-normal">Please register</h1>
+
+    <div class="form-floating">
+      <input formControlName="first_name" type="text" class="form-control" placeholder="First name">
+      <label for="floatingInput">First name</label>
+    </div>
+    <div class="form-floating">
+      <input formControlName="last_name" type="text" class="form-control" placeholder="Second name">
+      <label for="floatingInput">Second name</label>
+    </div>
+    <div class="form-floating">
+      <input formControlName="email" type="email" class="form-control" placeholder="name@example.com">
+      <label for="floatingInput">Email address</label>
+    </div>
+    <div class="form-floating">
+      <input formControlName="password" type="password" class="form-control" placeholder="Password">
+      <label for="floatingPassword">Password</label>
+    </div>
+    <div class="form-floating">
+      <input formControlName="password_confirm" type="password" class="form-control" placeholder="Password confirm">
+      <label for="floatingPassword">Password confirm</label>
+    </div>
+
+    <button class="btn btn-primary w-100 py-2" type="submit">Submit</button>
+
+  </form>
+</main>
