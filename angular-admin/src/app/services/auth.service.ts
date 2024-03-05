@@ -48,6 +48,28 @@ export class AuthService {
     return handled
   }
 
+  async updateInfo(body: any) {
+    const response = await axios.put(`${environment.api}/users/info/`, body, {
+      withCredentials: true,
+      validateStatus: () => true
+    })
+
+    const handled = await this.handleResponseAxios(response, true);
+
+    return handled
+  }
+
+  async updatePassword(body: any) {
+    const response = await axios.put(`${environment.api}/users/password/`, body, {
+      withCredentials: true,
+      validateStatus: () => true
+    })
+
+    const handled = await this.handleResponseAxios(response, true);
+
+    return handled
+  }
+
   async registerAsync(body: any) {
     const request = structuredClone(this.request)
     request.body = JSON.stringify(body)
