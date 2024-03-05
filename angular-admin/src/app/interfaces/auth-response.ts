@@ -1,7 +1,7 @@
 import { User } from "./user";
 
 export interface AuthResponse {
-    responseAnswer: any,
+    responseBody: any,
     success: boolean,
-    User?: User
+    user?: User
 }

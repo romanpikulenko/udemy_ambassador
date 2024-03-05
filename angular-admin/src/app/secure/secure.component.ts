@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavComponent } from './nav/nav.component';
 import { MenuComponent } from './menu/menu.component';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-secure',
@@ -9,6 +11,14 @@ import { MenuComponent } from './menu/menu.component';
   templateUrl: './secure.component.html',
   styleUrl: './secure.component.css'
 })
-export class SecureComponent {
+export class SecureComponent implements OnInit {
 
+  constructor(private authService: AuthService, private router: Router) { }
+
+  ngOnInit(): void {
+    this.authService.userAsync().then(e => {
+      console.log("Secure component")
+      if (!e.success) this.router.navigate(['/login'])
+    })
+  }
 }

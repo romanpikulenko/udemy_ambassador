@@ -9,8 +9,7 @@ export const routes: Routes = [
         path: '', component: SecureComponent,
     },
     {
-        path: '',
-        component: PublicComponent,
+        path: '', component: PublicComponent,
         children: [
             { path: 'login', component: LoginComponent },
             { path: 'register', component: RegisterComponent },

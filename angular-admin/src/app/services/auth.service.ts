@@ -31,8 +31,9 @@ export class AuthService {
     request.credentials = 'include';
 
     const response = await fetch(`${environment.api}/login/`, request);
+    const handled = await this.handleResponse(response, true);
 
-    return await this.handleResponse(response);
+    return handled
   }
 
   async userAsync() {
@@ -41,16 +42,34 @@ export class AuthService {
     request.credentials = 'include';
 
     const response = await fetch(`${environment.api}/user/`, request)
-
-    const handled = await this.handleResponse(response);
-    handled.User = handled.responseAnswer as User
+    const handled = await this.handleResponse(response, true);
 
     return handled
   }
 
-  async handleResponse(response: Response): Promise<AuthResponse> {
-    if (response.ok)
-      return { responseAnswer: await response.json(), success: true }
-    return { responseAnswer: await response.json(), success: false }
+  async logoutAsync() {
+    const request = structuredClone(this.request)
+    request.method = 'POST'
+    request.credentials = 'include';
+
+    const response = await fetch(`${environment.api}/logout/`, request)
+
+    const handled = await this.handleResponse(response);
+
+    return handled
+  }
+
+  async handleResponse(response: Response, getUser = false): Promise<AuthResponse> {
+
+    const result: AuthResponse = {
+      responseBody: await response.json(),
+      success: response.ok
+    }
+
+    if (getUser && response.ok) {
+      result.user = result.responseBody as User
+    }
+
+    return result
   }
 }
