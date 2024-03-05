@@ -23,7 +23,7 @@ export class LoginComponent {
   }
 
   login() {
-    this.authService.loginAsync(this.form.getRawValue())
+    this.authService.loginAxios(this.form.getRawValue())
       .then(_ => this.router.navigate(['/']));
   }
 }

@@ -16,7 +16,7 @@ export class NavComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.userAsync()
+    this.authService.userAxios()
       .then(e => {
         if (e.success) this.user = e.user
         else console.log(e.responseBody)

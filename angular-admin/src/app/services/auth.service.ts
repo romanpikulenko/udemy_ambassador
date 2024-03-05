@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { User } from '../interfaces/user';
 import { AuthResponse } from '../interfaces/auth-response';
+import axios, { AxiosResponse } from 'axios';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,37 @@ export class AuthService {
   }
 
   constructor() { }
+
+  async registerAxios(body: any) {
+    const response = await axios.post(`${environment.api}/register/`, body, {
+      validateStatus: () => true
+    })
+
+    const handled = this.handleResponseAxios(response)
+
+    return handled
+  }
+
+  async loginAxios(body: any) {
+    const response = await axios.post(`${environment.api}/login/`, body, {
+      withCredentials: true,
+      validateStatus: () => true
+    })
+
+    const handled = await this.handleResponseAxios(response, true);
+
+    return handled
+  }
+
+  async userAxios() {
+    const response = await axios.get(`${environment.api}/user/`, {
+      withCredentials: true
+    })
+
+    const handled = await this.handleResponseAxios(response, true);
+
+    return handled
+  }
 
   async registerAsync(body: any) {
     const request = structuredClone(this.request)
@@ -67,6 +99,19 @@ export class AuthService {
     }
 
     if (getUser && response.ok) {
+      result.user = result.responseBody as User
+    }
+
+    return result
+  }
+  async handleResponseAxios(response: AxiosResponse, getUser = false): Promise<AuthResponse> {
+
+    const result: AuthResponse = {
+      responseBody: response.data,
+      success: response.status == 200
+    }
+
+    if (getUser && result.success) {
       result.user = result.responseBody as User
     }
 
