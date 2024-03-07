@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { Emitters } from '../../emitters/emitters';
 
 @Component({
   selector: 'app-profile',
@@ -29,12 +30,12 @@ export class ProfileComponent implements OnInit {
       password_confirm: '',
     })
 
-    this.authService.userAsync().then(e => {
-      if (e.success) {
-        const user = e.user!
-        this.infoForm.patchValue(user)
-      }
-      else console.log(e)
+    if (this.authService.user) {
+      this.infoForm.patchValue(this.authService.user)
+    }
+
+    Emitters.authEmitter.subscribe(user => {
+      this.infoForm.patchValue(user)
     })
   }
 
@@ -49,7 +50,7 @@ export class ProfileComponent implements OnInit {
     this.authService.updateInfo(this.infoForm.getRawValue())
       .then(e => {
         if (e.success) this.router.navigate(['/'])
-        else console.log(e);
+        else console.log(e)
       })
   }
 

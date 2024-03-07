@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment.development';
 import { User } from '../interfaces/user';
 import { AuthResponse } from '../interfaces/auth-response';
 import axios, { AxiosResponse } from 'axios';
+import { Emitters } from '../emitters/emitters';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,8 @@ export class AuthService {
       'Content-Type': 'application/json'
     }
   }
+
+  user?: User
 
   constructor() { }
 
@@ -110,6 +113,10 @@ export class AuthService {
 
     const handled = await this.handleResponse(response);
 
+    if (handled.success) {
+      this.updateUser(undefined)
+    }
+
     return handled
   }
 
@@ -135,8 +142,14 @@ export class AuthService {
 
     if (getUser && result.success) {
       result.user = result.responseBody as User
+      this.updateUser(result.user)
     }
 
     return result
+  }
+
+  updateUser(user?: User) {
+    this.user = user
+    Emitters.authEmitter.emit(user)
   }
 }

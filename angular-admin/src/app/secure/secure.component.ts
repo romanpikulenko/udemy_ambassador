@@ -3,6 +3,7 @@ import { NavComponent } from './nav/nav.component';
 import { MenuComponent } from './menu/menu.component';
 import { AuthService } from '../services/auth.service';
 import { Router, RouterOutlet } from '@angular/router';
+import { Emitters } from '../emitters/emitters';
 
 @Component({
   selector: 'app-secure',
@@ -17,7 +18,6 @@ export class SecureComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService.userAxios().then(e => {
-      console.log("Secure component")
       if (!e.success) this.router.navigate(['/login'])
     })
   }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../interfaces/user';
 import { AuthService } from '../../services/auth.service';
 import { RouterLink } from '@angular/router';
+import { Emitters } from '../../emitters/emitters';
 
 @Component({
   selector: 'app-nav',
@@ -16,11 +17,11 @@ export class NavComponent implements OnInit {
   constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
-    this.authService.userAxios()
-      .then(e => {
-        if (e.success) this.user = e.user
-        else console.log(e.responseBody)
-      })
+    this.user = this.authService.user
+
+    Emitters.authEmitter.subscribe(user => {
+      this.user = user
+    })
   }
 
   logout() {
