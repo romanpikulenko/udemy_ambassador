@@ -5,6 +5,8 @@ import { RegisterComponent } from './public/register/register.component';
 import { PublicComponent } from './public/public.component';
 import { ProfileComponent } from './secure/profile/profile.component';
 import { UsersComponent } from './secure/users/users.component';
+import { LinksComponent } from './secure/links/links.component';
+import { ProductsComponent } from './secure/products/products.component';
 
 export const routes: Routes = [
     {
@@ -12,7 +14,9 @@ export const routes: Routes = [
         children: [
             { path: "", pathMatch: "full", redirectTo: 'users' },
             { path: "profile", component: ProfileComponent },
-            { path: "users", component: UsersComponent }
+            { path: "users", component: UsersComponent },
+            { path: "users/:id/links", component: LinksComponent },
+            { path: "products", component: ProductsComponent }
         ]
     },
     {
