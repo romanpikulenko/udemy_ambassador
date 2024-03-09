@@ -1,4 +1,4 @@
-<div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+<!-- <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
   <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
     aria-labelledby="sidebarMenuLabel">
     <div class="offcanvas-header">
@@ -21,4 +21,21 @@
       </ul>
     </div>
   </div>
-</div>
+</div> -->
+
+<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+  <div class="position-sticky pt-3">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a routerLink="/users" routerLinkActive="link-dark" class="nav-link">
+          Users
+        </a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/products" routerLinkActive="link-dark" class="nav-link">
+          Products
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

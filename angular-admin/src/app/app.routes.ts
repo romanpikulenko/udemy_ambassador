@@ -7,6 +7,7 @@ import { ProfileComponent } from './secure/profile/profile.component';
 import { UsersComponent } from './secure/users/users.component';
 import { LinksComponent } from './secure/links/links.component';
 import { ProductsComponent } from './secure/products/products.component';
+import { ProductsFormComponent } from './secure/products/products-form/products-form.component';
 
 export const routes: Routes = [
     {
@@ -16,7 +17,9 @@ export const routes: Routes = [
             { path: "profile", component: ProfileComponent },
             { path: "users", component: UsersComponent },
             { path: "users/:id/links", component: LinksComponent },
-            { path: "products", component: ProductsComponent }
+            { path: "products", component: ProductsComponent },
+            { path: "products/create", component: ProductsFormComponent, data: { create: true } },
+            { path: "products/:id/edit", component: ProductsFormComponent, data: { create: false } },
         ]
     },
     {

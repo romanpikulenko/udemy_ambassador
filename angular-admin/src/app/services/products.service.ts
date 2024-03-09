@@ -8,31 +8,98 @@ import { environment } from '../../environments/environment.development';
   providedIn: 'root'
 })
 export class ProductService {
+  endpoint = `${environment.api}/products/`;
 
   constructor() { }
 
   async all() {
-    const response = await axios.get(`${environment.api}/products/`, {
+    const response = await axios.get(this.endpoint, {
       withCredentials: true
     })
 
-    const handled = await this.handleResponseAxios(response, true);
+    const handled = await this.handleResponseAxios(response, FetchProducts.Collection);
 
     return handled
   }
 
-  async handleResponseAxios(response: AxiosResponse, getUsers = false): Promise<ProductsResponse> {
+  async delete(id: number) {
+    const url = new URL(id.toString(), this.endpoint)
+
+    const response = await axios.delete(url.toString(), {
+      withCredentials: true
+    })
+
+    const handled = await this.handleResponseAxios(response);
+
+    return handled
+  }
+
+  async get(id: number) {
+    const url = new URL(id.toString(), this.endpoint)
+
+    const response = await axios.get(url.toString(), {
+      withCredentials: true
+    })
+
+    const handled = await this.handleResponseAxios(response, FetchProducts.One);
+
+    return handled
+  }
+
+  async create(body: any) {
+    const response = await axios.post(this.endpoint, body, {
+      withCredentials: true,
+      validateStatus: () => true
+    })
+
+    const handled = await this.handleResponseAxios(response, FetchProducts.One);
+
+    return handled
+  }
+
+  async update(id: number, body: any) {
+    const url = new URL(id.toString(), this.endpoint)
+
+    const response = await axios.put(url.toString(), body, {
+      withCredentials: true,
+      validateStatus: () => true
+    })
+
+    const handled = await this.handleResponseAxios(response, FetchProducts.One);
+
+    return handled
+  }
+
+  async handleResponseAxios(response: AxiosResponse, getProducts: FetchProducts = FetchProducts.No): Promise<ProductsResponse> {
 
     const result: ProductsResponse = {
       responseBody: response.data,
-      success: response.status == 200
+      success: response.status >= 200 && response.status < 300
     }
 
-    if (getUsers && result.success) {
-      result.products = result.responseBody as Product[]
+    if (result.success) {
+      switch (getProducts) {
+        case FetchProducts.No:
+          break;
+        case FetchProducts.Collection:
+          result.products = result.responseBody as Product[]
+          break;
+        case FetchProducts.One:
+          const product = result.responseBody as Product
+          result.products = [product]
+          break;
+        default:
+          throw Error('Not supported')
+
+      }
     }
 
     return result
   }
+}
 
+enum FetchProducts {
+  No,
+  One,
+  Collection
 }
