@@ -3,6 +3,7 @@ import { ProductsResponse } from '../interfaces/products-response';
 import axios, { AxiosResponse } from 'axios';
 import { Product } from '../interfaces/product';
 import { environment } from '../../environments/environment.development';
+import { FetchModels } from './FetchProducts';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class ProductService {
       withCredentials: true
     })
 
-    const handled = await this.handleResponseAxios(response, FetchProducts.Collection);
+    const handled = await this.handleResponseAxios(response, FetchModels.Collection);
 
     return handled
   }
@@ -41,7 +42,7 @@ export class ProductService {
       withCredentials: true
     })
 
-    const handled = await this.handleResponseAxios(response, FetchProducts.One);
+    const handled = await this.handleResponseAxios(response, FetchModels.One);
 
     return handled
   }
@@ -52,7 +53,7 @@ export class ProductService {
       validateStatus: () => true
     })
 
-    const handled = await this.handleResponseAxios(response, FetchProducts.One);
+    const handled = await this.handleResponseAxios(response, FetchModels.One);
 
     return handled
   }
@@ -65,12 +66,12 @@ export class ProductService {
       validateStatus: () => true
     })
 
-    const handled = await this.handleResponseAxios(response, FetchProducts.One);
+    const handled = await this.handleResponseAxios(response, FetchModels.One);
 
     return handled
   }
 
-  async handleResponseAxios(response: AxiosResponse, getProducts: FetchProducts = FetchProducts.No): Promise<ProductsResponse> {
+  async handleResponseAxios(response: AxiosResponse, getProducts: FetchModels = FetchModels.No): Promise<ProductsResponse> {
 
     const result: ProductsResponse = {
       responseBody: response.data,
@@ -79,12 +80,12 @@ export class ProductService {
 
     if (result.success) {
       switch (getProducts) {
-        case FetchProducts.No:
+        case FetchModels.No:
           break;
-        case FetchProducts.Collection:
+        case FetchModels.Collection:
           result.products = result.responseBody as Product[]
           break;
-        case FetchProducts.One:
+        case FetchModels.One:
           const product = result.responseBody as Product
           result.products = [product]
           break;
@@ -98,8 +99,3 @@ export class ProductService {
   }
 }
 
-enum FetchProducts {
-  No,
-  One,
-  Collection
-}

@@ -1,6 +1,9 @@
+import { Order } from "./order";
+import { Product } from "./product";
+
 export interface Link {
     id: number,
     code: string,
-    orders: any[],
-    products: any[]
+    orders: Order[],
+    products: Product[]
 }
