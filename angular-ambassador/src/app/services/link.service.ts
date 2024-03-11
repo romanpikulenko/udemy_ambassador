@@ -3,6 +3,7 @@ import { LinkResponse } from '../interfaces/service-responses/link-response';
 import axios, { AxiosResponse } from 'axios';
 import { Link } from '../interfaces/link';
 import { environment } from '../../environments/environment.development';
+import { FetchModels } from './FetchProducts';
 
 @Injectable({
   providedIn: 'root'
@@ -11,25 +12,27 @@ export class LinkService {
 
   constructor() { }
 
-  async all(id: number) {
-    const response = await axios.get(`${environment.api}/users/${id}/links`, {
-      withCredentials: true
-    })
-
-    const handled = await this.handleResponseAxios(response, true);
-
-    return handled
-  }
-
-  async handleResponseAxios(response: AxiosResponse, getUsers = false): Promise<LinkResponse> {
+  async handleResponseAxios(response: AxiosResponse, getProducts: FetchModels = FetchModels.No): Promise<LinkResponse> {
 
     const result: LinkResponse = {
       responseBody: response.data,
-      success: response.status == 200
+      success: response.status >= 200 && response.status < 300
     }
 
-    if (getUsers && result.success) {
-      result.links = result.responseBody as Link[]
+    if (result.success) {
+      switch (getProducts) {
+        case FetchModels.No:
+          break;
+        case FetchModels.Collection:
+          result.links = result.responseBody as Link[]
+          break;
+        case FetchModels.One:
+          const link = result.responseBody as Link
+          result.links = [link]
+          break;
+        default:
+          throw Error('Not supported')
+      }
     }
 
     return result

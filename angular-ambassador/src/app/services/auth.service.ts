@@ -16,11 +16,11 @@ export class AuthService {
     }
   }
 
-  user?: User
+  authenticatedUser?: User
 
   constructor() { }
 
-  async registerAxios(body: any) {
+  async register(body: any) {
     const response = await axios.post(`${environment.api}/register/`, body, {
       validateStatus: () => true
     })
@@ -30,18 +30,31 @@ export class AuthService {
     return handled
   }
 
-  async loginAxios(body: any) {
+  async login(body: any) {
     const response = await axios.post(`${environment.api}/login/`, body, {
       withCredentials: true,
       validateStatus: () => true
     })
 
-    const handled = await this.handleResponse(response, true);
+    const handled = await this.handleResponse(response);
+    this.updateUser(undefined)
 
     return handled
   }
 
-  async userAxios() {
+  async logout() {
+    const response = await axios.post(`${environment.api}/logout/`, {}, {
+      withCredentials: true,
+      validateStatus: () => true
+    })
+
+    const handled = await this.handleResponse(response);
+    this.updateUser(undefined)
+
+    return handled
+  }
+
+  async user() {
     const response = await axios.get(`${environment.api}/user/`, {
       withCredentials: true
     })
@@ -73,12 +86,11 @@ export class AuthService {
     return handled
   }
 
-
   async handleResponse(response: AxiosResponse, getUser = false): Promise<AuthResponse> {
 
     const result: AuthResponse = {
       responseBody: response.data,
-      success: response.status == 200
+      success: response.status >= 200 && response.status < 300
     }
 
     if (getUser && result.success) {
@@ -90,7 +102,7 @@ export class AuthService {
   }
 
   updateUser(user?: User) {
-    this.user = user
+    this.authenticatedUser = user
     Emitters.authEmitter.emit(user)
   }
 }

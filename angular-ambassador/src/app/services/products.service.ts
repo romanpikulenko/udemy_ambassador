@@ -13,64 +13,6 @@ export class ProductService {
 
   constructor() { }
 
-  async all() {
-    const response = await axios.get(this.endpoint, {
-      withCredentials: true
-    })
-
-    const handled = await this.handleResponseAxios(response, FetchModels.Collection);
-
-    return handled
-  }
-
-  async delete(id: number) {
-    const url = new URL(id.toString(), this.endpoint)
-
-    const response = await axios.delete(url.toString(), {
-      withCredentials: true
-    })
-
-    const handled = await this.handleResponseAxios(response);
-
-    return handled
-  }
-
-  async get(id: number) {
-    const url = new URL(id.toString(), this.endpoint)
-
-    const response = await axios.get(url.toString(), {
-      withCredentials: true
-    })
-
-    const handled = await this.handleResponseAxios(response, FetchModels.One);
-
-    return handled
-  }
-
-  async create(body: any) {
-    const response = await axios.post(this.endpoint, body, {
-      withCredentials: true,
-      validateStatus: () => true
-    })
-
-    const handled = await this.handleResponseAxios(response, FetchModels.One);
-
-    return handled
-  }
-
-  async update(id: number, body: any) {
-    const url = new URL(id.toString(), this.endpoint)
-
-    const response = await axios.put(url.toString(), body, {
-      withCredentials: true,
-      validateStatus: () => true
-    })
-
-    const handled = await this.handleResponseAxios(response, FetchModels.One);
-
-    return handled
-  }
-
   async handleResponseAxios(response: AxiosResponse, getProducts: FetchModels = FetchModels.No): Promise<ProductsResponse> {
 
     const result: ProductsResponse = {

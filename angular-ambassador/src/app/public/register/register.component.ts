@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
 
   submit() {
     console.log(this.form.getRawValue())
-    this.authService.registerAxios(this.form.getRawValue())
+    this.authService.register(this.form.getRawValue())
       .then(e => {
         if (e.success) this.router.navigate(['/login'])
         else console.log(e.responseBody)
