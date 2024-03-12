@@ -6,6 +6,7 @@ import { MainComponent } from './main/main.component';
 import { SecureComponent } from './main/secure/secure.component';
 import { ProfileComponent } from './main/secure/profile/profile.component';
 import { FrontedProductsComponent } from './main/fronted-products/fronted-products.component';
+import { StatsComponent } from './main/secure/stats/stats.component';
 
 export const routes: Routes = [
     {
@@ -15,9 +16,8 @@ export const routes: Routes = [
             {
                 path: '', component: SecureComponent,
                 children: [
-                    {
-                        path: "profile", component: ProfileComponent
-                    }
+                    { path: "profile", component: ProfileComponent },
+                    { path: "stats", component: StatsComponent }
                 ]
             }
         ]

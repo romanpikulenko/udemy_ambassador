@@ -16,7 +16,16 @@ export class AuthService {
     }
   }
 
-  authenticatedUser?: User
+  private _authenticatedUser?: User
+
+  set authenticatedUser(user: User | undefined) {
+    this._authenticatedUser = user
+    Emitters.authEmitter.emit(user)
+  }
+
+  get authenticatedUser() {
+    return this._authenticatedUser
+  }
 
   constructor() { }
 
@@ -30,6 +39,7 @@ export class AuthService {
     return handled
   }
 
+  
   async login(body: any) {
     const response = await axios.post(`${environment.api}/login/`, body, {
       withCredentials: true,
@@ -37,7 +47,7 @@ export class AuthService {
     })
 
     const handled = await this.handleResponse(response);
-    this.updateUser(undefined)
+    this.authenticatedUser = undefined
 
     return handled
   }
@@ -49,7 +59,7 @@ export class AuthService {
     })
 
     const handled = await this.handleResponse(response);
-    this.updateUser(undefined)
+    this.authenticatedUser = undefined
 
     return handled
   }
@@ -95,14 +105,9 @@ export class AuthService {
 
     if (getUser && result.success) {
       result.user = result.responseBody as User
-      this.updateUser(result.user)
+      this.authenticatedUser = result.user
     }
 
     return result
-  }
-
-  updateUser(user?: User) {
-    this.authenticatedUser = user
-    Emitters.authEmitter.emit(user)
   }
 }

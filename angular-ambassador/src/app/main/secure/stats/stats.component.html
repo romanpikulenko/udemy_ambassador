@@ -1,0 +1,18 @@
+<div class="table-responsive">
+  <table class="table table-stripped table-sm">
+    <thead>
+      <tr>
+        <th>Link</th>
+        <th>Orders</th>
+        <th>Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let stat of stats">
+        <td>http://localhost:5000/{{stat.code}}</td>
+        <td>{{stat.count}}</td>
+        <td>{{stat.revenue}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
