@@ -10,16 +10,26 @@ import { Stat } from '../interfaces/stat';
 })
 export class StatsService {
 
-  endpoint = `${environment.api}/stats/`;
-
   constructor() { }
 
-  async all() {
-    const response = await axios.get(this.endpoint, {
-      withCredentials: true
+  async stats() {
+    const response = await axios.get(`${environment.api}/stats/`, {
+      withCredentials: true,
+      validateStatus: () => true
     })
 
     const handled = await this.handleResponse(response, FetchModels.Collection);
+
+    return handled
+  }
+
+  async rankings() {
+    const response = await axios.get(`${environment.api}/rankings/`, {
+      withCredentials: true,
+      validateStatus: () => true
+    })
+
+    const handled = await this.handleResponse(response);
 
     return handled
   }

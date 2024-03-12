@@ -16,7 +16,7 @@ export class StatsComponent implements OnInit {
   constructor(private statService: StatsService) { }
 
   ngOnInit(): void {
-    this.statService.all().then(e => {
+    this.statService.stats().then(e => {
       if (e.success) this.stats = e.stats!
       else console.log(e)
     })
