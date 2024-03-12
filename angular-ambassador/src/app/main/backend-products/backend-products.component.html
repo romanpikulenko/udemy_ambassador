@@ -1,4 +1,7 @@
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+  <div class="col-md-12 mb-4 input-group">
+    <input #searchBox type="text" class="form-control" placeholder="Search" (input)="search(searchBox.value)">
+  </div>
   <div class="col" *ngFor="let product of products">
     <div class="card shadow-sm">
       <img [src]="product.image" class="cover">
@@ -13,6 +16,6 @@
   </div>
 </div>
 
-<div class="d-flex justify-content-center mt-4" *ngIf="!last_page_reached">
+<div class="d-flex justify-content-center mt-4" *ngIf="showLoadMore">
   <button class="btn btn-primary" (click)="loadMore()">Load more</button>
 </div>

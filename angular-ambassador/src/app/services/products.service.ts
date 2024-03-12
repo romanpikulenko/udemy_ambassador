@@ -14,17 +14,19 @@ export class ProductService {
 
   constructor() { }
 
-  async all_backend(filter?: { page: number }) {
+  async all_backend(filter?: { page?: number, s?: string }) {
 
     const conf: AxiosRequestConfig = {
       withCredentials: true,
-      validateStatus: () => true
+      validateStatus: () => true,
+      params: {}
     }
 
-    if (filter) {
-      conf.params = {
-        page: filter.page
-      }
+    if (filter?.page) {
+      conf.params.page = filter.page
+    }
+    if (filter?.s) {
+      conf.params.s = filter.s
     }
 
     const response = await axios.get(`${this.endpoint}backend`, conf)
