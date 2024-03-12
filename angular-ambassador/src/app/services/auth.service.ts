@@ -39,7 +39,7 @@ export class AuthService {
     return handled
   }
 
-  
+
   async login(body: any) {
     const response = await axios.post(`${environment.api}/login/`, body, {
       withCredentials: true,
@@ -66,7 +66,8 @@ export class AuthService {
 
   async user() {
     const response = await axios.get(`${environment.api}/user/`, {
-      withCredentials: true
+      withCredentials: true,
+      validateStatus: () => true
     })
 
     const handled = await this.handleResponse(response, true);
