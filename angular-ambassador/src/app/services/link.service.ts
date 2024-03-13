@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { LinkResponse } from '../interfaces/service-responses/link-response';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Link } from '../interfaces/link';
 import { environment } from '../../environments/environment.development';
 import { FetchModels } from './FetchProducts';
@@ -12,7 +12,24 @@ export class LinkService {
 
   constructor() { }
 
-  async handleResponseAxios(response: AxiosResponse, getProducts: FetchModels = FetchModels.No): Promise<LinkResponse> {
+  async generate(productIds: number[]) {
+    const conf: AxiosRequestConfig = {
+      withCredentials: true,
+      validateStatus: () => true,
+    }
+
+    const data = {
+      products: productIds
+    }
+
+    const response = await axios.post(`${environment.api}/links/`, data, conf)
+
+    const handled = await this.handleResponse(response, FetchModels.One);
+
+    return handled
+  }
+
+  async handleResponse(response: AxiosResponse, getProducts: FetchModels = FetchModels.No): Promise<LinkResponse> {
 
     const result: LinkResponse = {
       responseBody: response.data,

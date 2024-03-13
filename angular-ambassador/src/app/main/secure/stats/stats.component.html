@@ -9,7 +9,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let stat of stats">
-        <td>http://localhost:5000/{{stat.code}}</td>
+        <td>{{checkoutLink(stat.code)}}</td>
         <td>{{stat.count}}</td>
         <td>{{stat.revenue}}</td>
       </tr>

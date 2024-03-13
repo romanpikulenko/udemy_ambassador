@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StatsService } from '../../../services/stats.service';
 import { Stat } from '../../../interfaces/stat';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-stats',
@@ -20,5 +21,9 @@ export class StatsComponent implements OnInit {
       if (e.success) this.stats = e.stats!
       else console.log(e)
     })
+  }
+
+  checkoutLink(linkCode: string) {
+    return `${environment.checkout_basepath}/${linkCode}}`
   }
 }

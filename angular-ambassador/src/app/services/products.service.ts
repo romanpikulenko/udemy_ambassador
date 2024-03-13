@@ -14,7 +14,7 @@ export class ProductService {
 
   constructor() { }
 
-  async all_backend(filter?: { page?: number, s?: string }) {
+  async all_backend(filter?: { page?: number, search?: string, sort?: string }) {
 
     const conf: AxiosRequestConfig = {
       withCredentials: true,
@@ -25,9 +25,13 @@ export class ProductService {
     if (filter?.page) {
       conf.params.page = filter.page
     }
-    if (filter?.s) {
-      conf.params.s = filter.s
+    if (filter?.search) {
+      conf.params.s = filter.search
     }
+    if (filter?.sort) {
+      conf.params.sort = filter.sort
+    }
+
 
     const response = await axios.get(`${this.endpoint}backend`, conf)
 
