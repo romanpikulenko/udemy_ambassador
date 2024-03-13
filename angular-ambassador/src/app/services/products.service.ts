@@ -41,7 +41,7 @@ export class ProductService {
   }
 
   async all_frontend() {
-    const response = await axios.get(`${this.endpoint}frontend/`, {
+    const response = await axios.get(`${this.endpoint}frontend`, {
       withCredentials: true,
       validateStatus: () => true
     })
