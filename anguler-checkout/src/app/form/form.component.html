@@ -11,13 +11,21 @@
           <span class="text-primary">Products</span>
         </h4>
         <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Product name</h6>
-              <small class="text-body-secondary">Brief description</small>
-            </div>
-            <span class="text-body-secondary">$12</span>
-          </li>
+          <ng-container *ngFor="let product of products">
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">{{product.title}}</h6>
+                <small class="text-body-secondary">{{product.description}}</small>
+              </div>
+              <span class="text-body-secondary">${{product.price}}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between lh-sm">
+              <div>
+                <h6 class="my-0">Quantity</h6>
+              </div>
+              <input type="number" min="0" class="text-muted form-control quantity">
+            </li>
+          </ng-container>
           <li class="list-group-item d-flex justify-content-between">
             <span>Total (USD)</span>
             <strong>$20</strong>

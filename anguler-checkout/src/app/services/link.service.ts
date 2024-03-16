@@ -13,7 +13,7 @@ export class LinkService {
   constructor() { }
 
   async get(code: string) {
-    const response = await axios.get(`${environment.api}/checkout/${code}`, {
+    const response = await axios.get(`${environment.api}/links/${code}`, {
       withCredentials: true,
       validateStatus: () => true
     })
