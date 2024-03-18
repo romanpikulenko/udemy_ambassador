@@ -88,7 +88,7 @@ class OrderAPIView(APIView):
         stripe.api_key = "sk_test_51OprTmD2kfc4zq5EwDdIQVQwMIW5BLdqItfacoh6YoITO7Xn2RgaqcoO0fPN53PegN61U8zTN4HaHWK1upifjWb700TlBWYCj7"
 
         source = stripe.checkout.Session.create(
-            success_url="http://localhost:5000/sucess?source={CHECKOUT_SESSION_ID}",
+            success_url="http://localhost:5000/success?source={CHECKOUT_SESSION_ID}",
             cancel_url="http://localhost:5000/error",
             payment_method_types=["card"],
             line_items=line_items,

@@ -24,6 +24,21 @@ export class OrderService {
     return handled
   }
 
+  async confirm(source: string) {
+    const data = {
+      source: source
+    }
+    console.log(data)
+    const response = await axios.post(`${environment.api}/orders/confirm/`, data, {
+      withCredentials: true,
+      validateStatus: () => true
+    })
+
+    const handled = await this.handleResponse(response);
+
+    return handled
+  }
+
   async handleResponse(response: AxiosResponse): Promise<ServiceBaseResponse> {
 
     const result: ServiceBaseResponse = {

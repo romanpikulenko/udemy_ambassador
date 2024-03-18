@@ -7,6 +7,11 @@ import { Product } from '../interfaces/product';
 import { User } from '../interfaces/user';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrderService } from '../services/order.service';
+import { environment } from '../../environments/environment.development';
+import { PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
+declare var Stripe: (stripe_key: string) => any
 
 @Component({
   selector: 'app-form',
@@ -22,8 +27,14 @@ export class FormComponent implements OnInit {
   user?: User
   quantities: Record<number, number> = {}
   form!: FormGroup
+  stripe: any
 
-  constructor(private linkService: LinkService, private orderService: OrderService, private route: ActivatedRoute, private formBuilder: FormBuilder) { }
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private linkService: LinkService,
+    private orderService: OrderService,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -35,6 +46,12 @@ export class FormComponent implements OnInit {
       city: '',
       zip: ''
     })
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.stripe = Stripe(`${environment.stripe_key}`)
+    }
+
+    console.log(this.stripe)
 
     this.code = this.route.snapshot.params['code']
     this.linkService.get(this.code).then(e => {
@@ -60,12 +77,16 @@ export class FormComponent implements OnInit {
       products: this.products.filter(e => e.id in this.quantities && this.quantities[e.id] > 0).map(p => ({
         product_id: p.id,
         quantity: this.quantities[p.id]
-      }
-      ))
+      }))
     }
 
     this.orderService.create(data).then(e => {
       console.log(e)
+      if (e.success) {
+        this.stripe.redirectToCheckout({
+          sessionId: e.responseBody.id
+        })
+      }
     })
   }
 }
