@@ -21,7 +21,7 @@ services:
       MYSQL_PASSWORD: chat
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - .dbdata:/var/lib/mysql
+      - ./.dbdata:/var/lib/mysql
     ports:
       - 3306:3306
     healthcheck:
