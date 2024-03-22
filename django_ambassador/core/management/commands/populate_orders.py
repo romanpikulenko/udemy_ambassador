@@ -12,7 +12,7 @@ class Command(BaseCommand):
 
         for _ in range(3):
             order = Order.objects.create(
-                user_id=35,
+                user_id=randrange(1, 30),
                 code="code",
                 ambassador_email="b@b.com",
                 first_name=faker.first_name(),

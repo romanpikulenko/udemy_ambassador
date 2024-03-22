@@ -6,13 +6,6 @@ name = "pypi"
 [packages]
 django = "*"
 djangorestframework = "*"
-mysqlclient = "*"
-django-mysql = "*"
-django-cors-headers = "*"
-pyjwt = "*"
-faker = "*"
-django-redis = "*"
-stripe = "*"
 confluent-kafka = "*"
 
 [dev-packages]

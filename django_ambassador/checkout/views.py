@@ -1,12 +1,15 @@
 import decimal
+import json
 
 import stripe
-from django.core.mail import send_mail
 from django.db import transaction
+from django.forms import model_to_dict
 from rest_framework import exceptions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from administrator.serializers import OrderSerializer
+from app.producer import deliver_message
 from core.models import Link, Order, OrderItem, Product
 
 from .serializers import LinkSerializer
@@ -112,20 +115,10 @@ class OrderConfirmAPIView(APIView):
         order.complete = True
         order.save()
 
-        # Admin email
-        send_mail(
-            subject="An order has been completed",
-            message=f"Order #{order.id} with a tolal of ${order.admin_revenue} has been completed",  # type: ignore
-            from_email="from@mail.com",
-            recipient_list=["admin@admin.com"],
-        )
+        order_data = model_to_dict(order)
+        order_data["ambassador_revenue"] = str(order.ambassador_revenue)
+        order_data["admin_revenue"] = str(order.admin_revenue)
 
-        # Ambassador email
-        send_mail(
-            subject="An order has been completed",
-            message=f"You earned ${order.ambassador_revenue} from the link #{order.code}",
-            from_email="from@mail.com",
-            recipient_list=[order.ambassador_email],
-        )
+        deliver_message(json.dumps(order_data))
 
         return Response({"message": "success"})
